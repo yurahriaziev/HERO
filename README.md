@@ -6,7 +6,8 @@
 
 **Image Credits**
 
-[Menu Icon](https://www.flaticon.com/free-icons/arrowhead)
+[Menu Icon](https://www.flaticon.com/authors/bsd)
+[Open Card Icon](https://www.flaticon.com/authors/iconkanan)
 
 
 
