@@ -6,11 +6,12 @@
 
 **Image Credits**
 
-[Menu Icon](https://www.flaticon.com/authors/bsd)
-[Open Card Icon](https://www.flaticon.com/authors/iconkanan)
+- [Menu Icon](https://www.flaticon.com/authors/bsd)
+- [Open Card Icon](https://www.flaticon.com/authors/iconkanan)
+- [User Profile Icon](https://www.flaticon.com/authors/saepul-nahwan)
 
 
-
+---
 **Authors**
 
 Backend - Yurii Hriaziev www.linkedin.com/in/yurii-hriaziev-7aa875240
