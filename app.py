@@ -45,18 +45,16 @@ class App():
 
 
     def boot(self):
-        boot_frame = ctk.CTkFrame(self.window, fg_color='#c7c7c7', width=self.width, height=self.height).place(x=0, y=0)
+        boot_frame = ctk.CTkFrame(self.window, fg_color='white', width=self.width, height=self.height).place(x=0, y=0)
 
         boot_btn = ctk.CTkButton(boot_frame, text='START', width=150, height=70, bg_color='#c7c7c7', command=self.login_page).place(x=125, y=315)
 
         # add code to run the boot animation
         self.window.mainloop()
 
-    def header(self):
-        self.home_frame = ctk.CTkFrame(self.window, fg_color='#e3e3e3', width=self.width, height=self.height)
-        self.home_frame.place(x=0, y=0)
+    def header(self, master):
 
-        title_frame = ctk.CTkFrame(self.home_frame,bg_color='#ff861c', fg_color='#ff861c', width=self.width, height=50).place(x=0, y=0)
+        title_frame = ctk.CTkFrame(master, bg_color='#ff861c', fg_color='#ff861c', width=self.width, height=50).place(x=0, y=0)
         title_text = ctk.CTkLabel(title_frame, text="be a hero", bg_color='#ff861c', text_color='white', font=('Borel', 25, 'bold')).place(x=145, y=10)  # add a font argument to this
         menu_btn = ctk.CTkButton(title_frame, image=self.menu_icon, text="", width=40, height=40, fg_color='#ff861c', bg_color='#ff861c', corner_radius=2, hover_color='#ff9a42')
         menu_btn.place(x=self.width-45, y=5)
@@ -67,7 +65,9 @@ class App():
             admin_account_btn.place(x=5, y=5)
 
     def homepage(self):
-        self.header()
+        self.home_frame = ctk.CTkFrame(self.window, fg_color='#e3e3e3', width=self.width, height=self.height)
+        self.home_frame.place(x=0, y=0)
+        self.header(self.home_frame)
 
         self.main_content_frame = ctk.CTkScrollableFrame(self.home_frame, width=self.width-20, height=self.height-60, fg_color='#dedede')
         self.main_content_frame.place(x=0,y=50)
@@ -93,16 +93,18 @@ class App():
         self.user_page_frame.place(x=0, y=0)
 
     def login_page(self):
-        self.main_login_frame = ctk.CTkFrame(self.window, width=self.width-100, height=150, bg_color='#c7c7c7', fg_color='#ff861c')
+        self.title = ctk.CTkLabel(self.window, text='HERO', font=(self.font, 50, 'bold'), text_color='#ff861c', bg_color='white')
+        self.title.place(x=135, y=100)
+        self.main_login_frame = ctk.CTkFrame(self.window, width=self.width-100, height=190, bg_color='white', fg_color='#c7c7c7')
         self.main_login_frame.place(x=50, y=250)
 
-        self.username = ctk.CTkEntry(self.window, width=280, height=60, placeholder_text='Username', font=(self.font, 20), bg_color='#ff861c', corner_radius=10, placeholder_text_color='#d6d6d6', text_color='#d6d6d6')
+        self.username = ctk.CTkEntry(self.window, width=280, height=60, placeholder_text='Username', font=(self.font, 20), bg_color='#c7c7c7', fg_color='white', border_color='white', corner_radius=10, placeholder_text_color='#a3a3a3', text_color='#a3a3a3')
         self.username.place(x=60, y=260)
-        self.password = ctk.CTkEntry(self.window, width=280, height=60, placeholder_text='Password', font=(self.font, 20), bg_color='#ff861c', corner_radius=10, placeholder_text_color='#d6d6d6', text_color='#d6d6d6')
+        self.password = ctk.CTkEntry(self.window, width=280, height=60, placeholder_text='Password', font=(self.font, 20), bg_color='#c7c7c7', fg_color='white', border_color='white', corner_radius=10, placeholder_text_color='#a3a3a3', text_color='#a3a3a3')
         self.password.place(x=60, y=330)
 
-        open_card_btn = ctk.CTkButton(self.window, image=self.open_card_icon, text="", width=290, height=30, fg_color='white', bg_color='#c7c7c7', corner_radius=5, hover_color='#ff9a42', command=self.access_user)
-        open_card_btn.place(x=55, y=405)
+        open_card_btn = ctk.CTkButton(self.window, image=self.open_card_icon, text="", width=290, height=30, fg_color='#ff861c', bg_color='#c7c7c7', corner_radius=5, hover_color='#ff9a42', command=self.access_user)
+        open_card_btn.place(x=55, y=400)
 
     def access_user(self):
         username = self.username.get()
