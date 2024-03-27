@@ -93,7 +93,7 @@ class App():
         self.user_page_frame.place(x=0, y=0)
 
     def login_page(self):
-        self.title = ctk.CTkLabel(self.window, text='HERO', font=(self.font, 50, 'bold'), text_color='#ff861c', bg_color='white')
+        self.title = ctk.CTkLabel(self.window, text='hero', font=(self.font, 50, 'bold'), text_color='#ff861c', bg_color='white')
         self.title.place(x=135, y=100)
         self.main_login_frame = ctk.CTkFrame(self.window, width=self.width-100, height=190, bg_color='white', fg_color='#c7c7c7')
         self.main_login_frame.place(x=50, y=250)
