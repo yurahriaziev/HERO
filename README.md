@@ -22,5 +22,5 @@ Frontend - Andressa Cicotoste www.linkedin.com/in/andressa-cicotoste-195230282/
 
 **March 26, 2024, App**
 
-<img src="icons/login.png" width='220' height='400'>   <img src="icons/home.png" width='220' height='400'>
+<img src="icons/login1.png" width='220' height='400'>   <img src="icons/home.png" width='220' height='400'>
 
