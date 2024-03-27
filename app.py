@@ -24,9 +24,18 @@ class App():
         self.database.create_table('Users', 'first_n TEXT', 'last_n TEXT', 'username TEXT',
                                    'birth_date_day INTEGER', 'birth_date_month TEXT',
                                    'birth_date_year INTEGER', 'email TEXT', 'password TEXT')
-        # adding ADMIN user to the database
-        self.database.cur.execute('''INSERT INTO Users (first_n, last_n, username, birth_date_day, birth_date_month, birth_date_year, email, password) VALUES ('AdminName', 'AdminLast', 'admin001', 8, 'Feb', 2006, 'admin@gmail.com', 'myadminpass')''')
-        self.database.view_table('Users')
+        
+        # adding ADMIN user to the database     RUN ONES TO CREATE ADMIN ACCOUNT
+        # self.database.cur.execute('''INSERT INTO Users (first_n, last_n, username, birth_date_day, birth_date_month, birth_date_year, email, password) VALUES ('AdminName', 'AdminLast', 'admin001', 8, 'Feb', 2006, 'admin@gmail.com', 'myadminpass')''')
+        # self.database.conn.commit()
+        print('Current users')
+        users = self.database.view_table('Users')
+
+        # adding dummy opportunity events and accessing the Opportunity Events table
+        
+
+        self.events = self.database.view_table('OpportunityEvents')
+
         #fonts
         # self.title_font = ctk.CTkFont()
 
@@ -43,7 +52,7 @@ class App():
         # add code to run the boot animation
         self.window.mainloop()
 
-    def homepage(self):
+    def header(self):
         self.home_frame = ctk.CTkFrame(self.window, fg_color='#e3e3e3', width=self.width, height=self.height)
         self.home_frame.place(x=0, y=0)
 
@@ -57,12 +66,14 @@ class App():
             admin_account_btn = ctk.CTkButton(title_frame, image=admin_icon, text="", width=40, height=40, fg_color='#ff861c', bg_color='#ff861c', corner_radius=2, hover_color='#ff9a42', command=self.user_page)
             admin_account_btn.place(x=5, y=5)
 
+    def homepage(self):
+        self.header()
 
         self.main_content_frame = ctk.CTkScrollableFrame(self.home_frame, width=self.width-20, height=self.height-60, fg_color='#dedede')
         self.main_content_frame.place(x=0,y=50)
 
         # adding opportunity card placeholders
-        for i in range(20):
+        for i in range(len(self.events)):
             self.card = ctk.CTkFrame(self.main_content_frame, fg_color='#c7c7c7', width=400, height=100)
             self.card.pack(pady=5)
 
@@ -85,9 +96,9 @@ class App():
         self.main_login_frame = ctk.CTkFrame(self.window, width=self.width-100, height=150, bg_color='#c7c7c7', fg_color='#ff861c')
         self.main_login_frame.place(x=50, y=250)
 
-        self.username = ctk.CTkEntry(self.window, width=280, height=60, placeholder_text='Your username', font=(self.font, 30), bg_color='#ff861c', corner_radius=10)
+        self.username = ctk.CTkEntry(self.window, width=280, height=60, placeholder_text='Username', font=(self.font, 20), bg_color='#ff861c', corner_radius=10, placeholder_text_color='#d6d6d6', text_color='#d6d6d6')
         self.username.place(x=60, y=260)
-        self.password = ctk.CTkEntry(self.window, width=280, height=60, placeholder_text='Your password', font=(self.font, 30), bg_color='#ff861c', corner_radius=10)
+        self.password = ctk.CTkEntry(self.window, width=280, height=60, placeholder_text='Password', font=(self.font, 20), bg_color='#ff861c', corner_radius=10, placeholder_text_color='#d6d6d6', text_color='#d6d6d6')
         self.password.place(x=60, y=330)
 
         open_card_btn = ctk.CTkButton(self.window, image=self.open_card_icon, text="", width=290, height=30, fg_color='white', bg_color='#c7c7c7', corner_radius=5, hover_color='#ff9a42', command=self.access_user)
@@ -96,9 +107,7 @@ class App():
     def access_user(self):
         username = self.username.get()
         password = self.password.get()
-        print(username, password)
         self.current_user = self.database.get_user(username, password)
-        print(self.current_user)
 
         if self.current_user:
             self.homepage()
