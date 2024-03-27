@@ -22,5 +22,5 @@ Frontend - Andressa Cicotoste www.linkedin.com/in/andressa-cicotoste-195230282/
 
 **March 26, 2024, App**
 
-![Log in page](login.png)
-![Home page](home.png)
+![Log in page](icons/login.png)
+![Home page](icons/home.png)
