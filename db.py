@@ -13,10 +13,17 @@ class DB:
         self.conn.commit()
 
     def add_item(self, table_name, **col_data):
-        columns = ', '.join(col_data.keys())
+        colums = ', '.join(col_data.keys())
         placeholders = ', '.join('?' * len(col_data))
+        print(placeholders)
 
-        query = f'INSERT INTO {table_name}'
+        query = f'INSERT INTO {table_name} ({colums}) VALUES ({placeholders})'
+
+        values = tuple(col_data.values())
+
+        self.cur.execute(query, values)
+
+        self.conn.commit()
 
     def get_user(self, username, password):
         user = self.cur.execute(f'SELECT * FROM Users WHERE username = ? AND password = ?', (username, password,)).fetchone()
@@ -24,8 +31,9 @@ class DB:
 
     def view_table(self, table):
         data = self.cur.execute(f'SELECT rowid, * FROM {table}').fetchall()
-        for row in data:
-            print(row)
+        # for row in data:
+        #     print(row)
+        return data
 
 
 if __name__ == '__main__':
