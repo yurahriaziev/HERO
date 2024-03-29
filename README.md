@@ -9,6 +9,9 @@
 - [Menu Icon](https://www.flaticon.com/authors/bsd)
 - [Open Card Icon](https://www.flaticon.com/authors/iconkanan)
 - [User Profile Icon](https://www.flaticon.com/authors/saepul-nahwan)
+- [Location Pin Icon](https://www.flaticon.com/authors/freepik)
+- [Email Icon](https://www.flaticon.com/authors/ilham-fitrotul-hayat)
+- [Phone Icon](https://www.flaticon.com/authors/ilham-fitrotul-hayat)
 
 
 ---
@@ -24,5 +27,5 @@ Frontend - Andressa Cicotoste www.linkedin.com/in/andressa-cicotoste-195230282/
 
 **March 26, 2024, App**
 
-<img src="icons/login1.png" width='220' height='400'>   <img src="icons/home.png" width='220' height='400'>
+<img src="icons/login2.png" width='220' height='400'>   <img src="icons/home2.png" width='220' height='400'>   <img src="icons/eventpage.png" width='220' height='400'>
 
