@@ -11,6 +11,9 @@ class App():
         self.window.geometry(f'{str(self.width)}x{str(self.height)}')
         self.window.resizable(0, 0)
 
+        self.blue = '#2d89a3'
+        self.light_blue = '#3492AD'
+
         self.window.title('HERO')
         self.font = 'Baloo Bhai 2'
 
@@ -67,15 +70,15 @@ class App():
         self.window.mainloop()
 
     def header(self, master):
-
-        title_frame = ctk.CTkFrame(master, bg_color='#ff861c', fg_color='#ff861c', width=self.width, height=50).place(x=0, y=0)
-        title_text = ctk.CTkLabel(title_frame, text="be a hero", bg_color='#ff861c', text_color='white', font=('Borel', 25, 'bold')).place(x=145, y=10)  # add a font argument to this
-        menu_btn = ctk.CTkButton(title_frame, image=self.menu_icon, text="", width=40, height=40, fg_color='#ff861c', bg_color='#ff861c', corner_radius=2, hover_color='#ff9a42')
+        # change orange everywhere to blue
+        title_frame = ctk.CTkFrame(master, bg_color=self.blue, fg_color=self.blue, width=self.width, height=50).place(x=0, y=0)
+        title_text = ctk.CTkLabel(title_frame, text="be a hero", bg_color=self.blue, text_color='white', font=('Borel', 25, 'bold')).place(x=145, y=10)  # add a font argument to this
+        menu_btn = ctk.CTkButton(title_frame, image=self.menu_icon, text="", width=40, height=40, fg_color=self.blue, bg_color=self.blue, corner_radius=2, hover_color=self.light_blue)
         menu_btn.place(x=self.width-45, y=5)
 
         if self.current_user:
             admin_icon = ImageTk.PhotoImage(Image.open("icons/user.png").resize((30, 30)))
-            admin_account_btn = ctk.CTkButton(title_frame, image=admin_icon, text="", width=40, height=40, fg_color='#ff861c', bg_color='#ff861c', corner_radius=2, hover_color='#ff9a42', command=self.user_page)
+            admin_account_btn = ctk.CTkButton(title_frame, image=admin_icon, text="", width=40, height=40, fg_color=self.blue, bg_color=self.blue, corner_radius=2, hover_color=self.light_blue, command=self.user_page)
             admin_account_btn.place(x=5, y=5)
 
     def homepage(self):
@@ -106,8 +109,8 @@ class App():
                 event_location = ctk.CTkLabel(self.card_desc, text=f'Where: {event[3]}', text_color='black', font=(self.font, 12))
                 event_location.place(x=5, y=50) 
 
-                open_card_btn = ctk.CTkButton(self.card, image=self.open_card_icon, text="", width=40, height=80, fg_color='#ff861c',
-                                            bg_color='#c7c7c7', corner_radius=5, hover_color='#ff9a42', command=lambda e=event: self.event_page(e))
+                open_card_btn = ctk.CTkButton(self.card, image=self.open_card_icon, text="", width=40, height=80, fg_color=self.blue,
+                                            bg_color='#c7c7c7', corner_radius=5, hover_color=self.light_blue, command=lambda e=event: self.event_page(e))
                 open_card_btn.place(x=340, y=10)
         else:
             message = ctk.CTkLabel(self.main_content_frame, text='No available events', font=(self.font, 20, 'bold'), text_color='#c7c7c7')
@@ -175,7 +178,7 @@ class App():
 
         self.contact_frame = ctk.CTkFrame(self.event_frame, width=self.width-40, height=85, fg_color='white')
         self.contact_frame.pack()
-        self.contact_title = ctk.CTkLabel(self.contact_frame, bg_color='white', text='Contact Us', font=(self.font, 15, 'bold'), text_color='#c7c7c7')
+        self.contact_title = ctk.CTkLabel(self.contact_frame, bg_color='white', text='Contact Us', font=(self.font, 15, 'bold'), text_color='#212121')
         self.contact_title.place(x=0, y=0)
         email_img = ctk.CTkLabel(self.contact_frame, image=self.email_icon, text="", bg_color='white')
         email_img.place(x=0, y=25)
@@ -191,7 +194,7 @@ class App():
         self.placeholder_frame = ctk.CTkFrame(self.event_frame, height=120, bg_color='white', fg_color='white')
         self.placeholder_frame.pack(pady=5)
 
-        self.apply_btn = ctk.CTkButton(self.page, text='apply now', width=self.width-40, height=100, fg_color='#ff861c', corner_radius=20, bg_color='white', hover_color='#ff9a42')
+        self.apply_btn = ctk.CTkButton(self.page, text='apply now', width=self.width-40, height=100, fg_color=self.blue, corner_radius=20, bg_color='white', hover_color=self.light_blue)
         self.apply_btn.place(x=16, y=580)
 
 
