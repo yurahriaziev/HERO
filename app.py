@@ -11,6 +11,8 @@ class App():
         self.window.geometry(f'{str(self.width)}x{str(self.height)}')
         self.window.resizable(0, 0)
 
+        self.current_page = ''
+
         self.blue = '#2d89a3'
         self.light_blue = '#3492AD'
 
@@ -31,9 +33,9 @@ class App():
         # adding ADMIN user to the database     RUN ONES TO CREATE ADMIN ACCOUNT
         # self.database.cur.execute('''INSERT INTO Users (first_n, last_n, username, birth_date_day, birth_date_month, birth_date_year, email, password) VALUES ('AdminName', 'AdminLast', 'admin001', 8, 'Feb', 2006, 'admin@gmail.com', 'myadminpass')''')
         # self.database.conn.commit()
-        print('Current users')
+        # print('Current users')
         users = self.database.view_table('Users')
-        for user in users: print(user)
+        # for user in users: print(user)
         # adding dummy opportunity events and accessing the Opportunity Events table
         # event1_desc = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ultricies, nisl id elementum porta, tortor urna placerat risus, non lobortis enim leo ac ex. Proin tempor lorem id lacus luctus laoreet. Praesent tempus lectus lectus. Aliquam cursus, felis sit amet aliquam elementum, dolor massa aliquam sem, quis aliquet lorem nunc.'
         # self.database.cur.execute('''INSERT INTO OpportunityEvents (title, description, location_country_city, date_start, organizer, contact_phone, contact_email, application_link) VALUES ('Opportunity Event 1', ?, 'Israel/Tel Aviv', '5/4/2024', 'Organizer1', '300-434-0000', 'organizer1@gmail.com', 'url2apply.com')''', (event1_desc,))
@@ -47,8 +49,8 @@ class App():
         
 
         self.events = self.database.view_table('OpportunityEvents')
-        for event in self.events:
-            print(event)
+        # for event in self.events:
+        #     print(event)
 
         #fonts
         # self.title_font = ctk.CTkFont()
@@ -59,7 +61,7 @@ class App():
         self.location_icon = ctk.CTkImage(light_image=Image.open("icons/location.png").resize((20, 20)))
         self.email_icon = ctk.CTkImage(light_image=Image.open("icons/arroba.png").resize((20, 20)))
         self.phone_icon = ctk.CTkImage(light_image=Image.open("icons/call.png").resize((20, 20)))
-
+        self.left_arrow = ctk.CTkImage(light_image=Image.open("icons/left_arrow.png").resize((20, 20)))
 
     def boot(self):
         boot_frame = ctk.CTkFrame(self.window, fg_color='white', width=self.width, height=self.height).place(x=0, y=0)
@@ -70,18 +72,21 @@ class App():
         self.window.mainloop()
 
     def header(self, master):
+        self.my_x = -200
         # change orange everywhere to blue
         title_frame = ctk.CTkFrame(master, bg_color=self.blue, fg_color=self.blue, width=self.width, height=50).place(x=0, y=0)
+        self.menu = self.menu_frame()
         title_text = ctk.CTkLabel(title_frame, text="be a hero", bg_color=self.blue, text_color='white', font=('Borel', 25, 'bold')).place(x=145, y=10)  # add a font argument to this
-        menu_btn = ctk.CTkButton(title_frame, image=self.menu_icon, text="", width=40, height=40, fg_color=self.blue, bg_color=self.blue, corner_radius=2, hover_color=self.light_blue)
-        menu_btn.place(x=self.width-45, y=5)
+        self.menu_btn = ctk.CTkButton(title_frame, image=self.menu_icon, text="", width=40, height=40, fg_color=self.blue, bg_color=self.blue, corner_radius=2, hover_color=self.light_blue, command=self.open_menu)
+        self.menu_btn.place(x=5, y=5)
 
         if self.current_user:
             admin_icon = ImageTk.PhotoImage(Image.open("icons/user.png").resize((30, 30)))
             admin_account_btn = ctk.CTkButton(title_frame, image=admin_icon, text="", width=40, height=40, fg_color=self.blue, bg_color=self.blue, corner_radius=2, hover_color=self.light_blue, command=self.user_page)
-            admin_account_btn.place(x=5, y=5)
+            admin_account_btn.place(x=self.width-45, y=5)
 
     def homepage(self):
+        self.current_page = 'home-page'
         self.home_frame = ctk.CTkFrame(self.window, fg_color='white', width=self.width, height=self.height)
         self.home_frame.place(x=0, y=0)
         self.header(self.home_frame)
@@ -119,10 +124,14 @@ class App():
         self.window.mainloop()
 
     def user_page(self):
-        self.user_page_frame = ctk.CTkFrame(self.window, width=self.width, height=self.height)
+        self.current_page = 'user-page'
+        self.user_page_frame = ctk.CTkFrame(self.window, width=self.width, height=self.height, fg_color='white')
         self.user_page_frame.place(x=0, y=0)
 
+        self.header(self.user_page_frame)
+
     def login_page(self):
+        self.current_page = 'login-page'
         if not self.current_user:
             self.title = ctk.CTkLabel(self.window, text='hero', font=(self.font, 50, 'bold'), text_color='#ff861c', bg_color='white')
             self.title.place(x=155, y=100)
@@ -150,6 +159,7 @@ class App():
             ctk.CTkLabel(self.window, text='Could not find user', text_color='red', font=(self.font, 10)).place(x=200, y=420)
 
     def event_page(self, event):
+        self.current_page = 'event-page'
         self.page = ctk.CTkFrame(self.window, width=self.width, height=self.height)
         self.page.place(x=0, y=0)
 
@@ -196,6 +206,58 @@ class App():
 
         self.apply_btn = ctk.CTkButton(self.page, text='apply now', width=self.width-40, height=100, fg_color=self.blue, corner_radius=20, bg_color='white', hover_color=self.light_blue)
         self.apply_btn.place(x=16, y=580)
+
+    def menu_frame(self):
+        frame = ctk.CTkFrame(self.window, height=self.height-50, width=200)
+
+        if not self.current_page == 'home-page':
+            home_text = ctk.CTkLabel(frame, text='Back Home', font=(self.font, 25), text_color='#c7c7c7')
+            home_text.place(x=26, y=0)
+            home_btn = ctk.CTkButton(frame, text='', image=self.left_arrow, fg_color='#7d7d7d', hover_color='#c7c7c7', corner_radius=0,command=self.homepage)
+            home_btn.place(x=20, y=30)
+        else:
+            searcb_text = ctk.CTkLabel(frame, text='Search Events', font=(self.font, 25), text_color='#c7c7c7')
+            searcb_text.place(x=26, y=0)
+
+            search_box = ctk.CTkTextbox(frame, width=180, height=30, wrap='none', bg_color='white', fg_color='white', text_color='black')
+            search_box.place(x=10,y=40)
+
+        return frame
+
+    def open_menu(self):
+        # Define a function to animate the menu opening
+        def animate_open():
+            if self.my_x < 0:
+                self.my_x += 20
+                self.menu.place(x=self.my_x, y=50)
+                # Call animate_open again after a delay if menu is not fully opened
+                if self.my_x < 0:
+                    self.window.after(10, animate_open)
+
+        # Define a function to animate the menu closing
+        def animate_close():
+            if self.my_x > -200:
+                self.my_x -= 20
+                self.menu.place(x=self.my_x, y=50)
+                # Call animate_close again after a delay if menu is not fully closed
+                if self.my_x > -200:
+                    self.window.after(10, animate_close)
+
+        # Define the close_menu function
+        def close_menu():
+            animate_close()
+            # Change command of menu button to open_menu after closing animation
+            self.menu_btn.configure(command=self.open_menu)
+
+        # Check if menu is currently closed
+        if self.my_x < 0:
+            # If menu is closed, start opening animation
+            animate_open()
+            # Change command of menu button to close_menu
+            self.menu_btn.configure(command=close_menu)
+        else:
+            # If menu is open, start closing animation
+            close_menu()
 
 
 if __name__ == "__main__":
