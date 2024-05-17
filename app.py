@@ -133,7 +133,7 @@ class App():
     def login_page(self):
         self.current_page = 'login-page'
         if not self.current_user:
-            self.title = ctk.CTkLabel(self.window, text='hero', font=(self.font, 50, 'bold'), text_color='#ff861c', bg_color='white')
+            self.title = ctk.CTkLabel(self.window, text='hero', font=(self.font, 50, 'bold'), text_color=self.blue, bg_color='white')
             self.title.place(x=155, y=100)
             self.main_login_frame = ctk.CTkFrame(self.window, width=self.width-100, height=170, bg_color='white', fg_color='#c7c7c7')
             self.main_login_frame.place(x=50, y=250)
@@ -143,7 +143,7 @@ class App():
             self.password = ctk.CTkEntry(self.window, width=280, height=50, placeholder_text='Password', font=(self.font, 20), bg_color='#c7c7c7', fg_color='white', border_color='white', corner_radius=10, placeholder_text_color='#a3a3a3', text_color='#a3a3a3')
             self.password.place(x=60, y=320)
 
-            open_card_btn = ctk.CTkButton(self.window, image=self.open_card_icon, text="", width=290, height=30, fg_color='#ff861c', bg_color='#c7c7c7', corner_radius=5, hover_color='#ff9a42', command=self.access_user)
+            open_card_btn = ctk.CTkButton(self.window, image=self.open_card_icon, text="", width=290, height=30, fg_color=self.blue, bg_color='#c7c7c7', corner_radius=5, hover_color=self.light_blue, command=self.access_user)
             open_card_btn.place(x=55, y=380)
         else:
             self.homepage()
@@ -156,7 +156,7 @@ class App():
         if self.current_user:
             self.homepage()
         else:
-            ctk.CTkLabel(self.window, text='Could not find user', text_color='red', font=(self.font, 10)).place(x=200, y=420)
+            ctk.CTkLabel(self.window, text='Could not find user', text_color='#ff384c', bg_color='white', font=(self.font, 30, 'bold')).place(x=70, y=430)
 
     def event_page(self, event):
         self.current_page = 'event-page'
@@ -262,5 +262,5 @@ class App():
 
 if __name__ == "__main__":
     phone = [400, 700]
-    app = App(phone, 'admin001')
+    app = App(phone)
     app.boot()
