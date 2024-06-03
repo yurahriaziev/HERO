@@ -13,8 +13,10 @@ class App():
 
         self.current_page = ''
 
+        # colors
         self.blue = '#2d89a3'
         self.light_blue = '#3492AD'
+        self.white = 'white'
 
         self.window.title('HERO')
         self.font = 'Baloo Bhai 2'
@@ -35,17 +37,6 @@ class App():
         # self.database.conn.commit()
         # print('Current users')
         users = self.database.view_table('Users')
-        # for user in users: print(user)
-        # adding dummy opportunity events and accessing the Opportunity Events table
-        # event1_desc = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ultricies, nisl id elementum porta, tortor urna placerat risus, non lobortis enim leo ac ex. Proin tempor lorem id lacus luctus laoreet. Praesent tempus lectus lectus. Aliquam cursus, felis sit amet aliquam elementum, dolor massa aliquam sem, quis aliquet lorem nunc.'
-        # self.database.cur.execute('''INSERT INTO OpportunityEvents (title, description, location_country_city, date_start, organizer, contact_phone, contact_email, application_link) VALUES ('Opportunity Event 1', ?, 'Israel/Tel Aviv', '5/4/2024', 'Organizer1', '300-434-0000', 'organizer1@gmail.com', 'url2apply.com')''', (event1_desc,))
-        # self.database.cur.execute('''INSERT INTO OpportunityEvents (title, description, location_country_city, date_start, organizer, contact_phone, contact_email, application_link) VALUES ('Opportunity Event 2', ?, 'Israel/Jerusalem', '12/3/2024', 'Organizer1', '300-434-0000', 'organizer1@gmail.com', 'url2apply.com')''', (event1_desc,))
-        # self.database.cur.execute('''INSERT INTO OpportunityEvents (title, description, location_country_city, date_start, organizer, contact_phone, contact_email, application_link) VALUES ('Opportunity Event 3', ?, 'Israel/Tel Aviv', '30/6/2024', 'Organizer2', '300-434-0890', 'organizer2@gmail.com', 'url2apply.com')''', (event1_desc,))
-        # self.database.cur.execute('''INSERT INTO OpportunityEvents (title, description, location_country_city, date_start, organizer, contact_phone, contact_email, application_link) VALUES ('Opportunity Event 4', ?, 'Israel/Jerusalem', '11/2/2024', 'Organizer3', '300-434-2800', 'organizer3@gmail.com', 'url2apply.com')''', (event1_desc,))
-        # self.database.cur.execute('''INSERT INTO OpportunityEvents (title, description, location_country_city, date_start, organizer, contact_phone, contact_email, application_link) VALUES ('Opportunity Event 5', ?, 'Israel/Tel Aviv', '3/4/2024', 'Organizer4', '300-434-2300', 'organizer4@gmail.com', 'url2apply.com')''', (event1_desc,))
-        # self.database.cur.execute('''INSERT INTO OpportunityEvents (title, description, location_country_city, date_start, organizer, contact_phone, contact_email, application_link) VALUES ('Opportunity Event 6', ?, 'Israel/Jerusalem', '28/5/2024', 'Organizer4', '300-434-2300', 'organizer4@gmail.com', 'url2apply.com')''', (event1_desc,))
-        # self.database.cur.execute('''INSERT INTO OpportunityEvents (title, description, location_country_city, date_start, organizer, contact_phone, contact_email, application_link) VALUES ('Opportunity Event 7', ?, 'Israel/Tel Aviv', '15/8/2024', 'Organizer5', '300-434-0980', 'organizer5@gmail.com', 'url2apply.com')''', (event1_desc,))
-        # self.database.conn.commit()
         
 
         self.events = self.database.view_table('OpportunityEvents')
@@ -62,6 +53,7 @@ class App():
         self.email_icon = ctk.CTkImage(light_image=Image.open("icons/arroba.png").resize((20, 20)))
         self.phone_icon = ctk.CTkImage(light_image=Image.open("icons/call.png").resize((20, 20)))
         self.left_arrow = ctk.CTkImage(light_image=Image.open("icons/left_arrow.png").resize((20, 20)))
+        self.edit_icon = ctk.CTkImage(Image.open('icons/edit.png'), size=(35, 35))
 
     def boot(self):
         boot_frame = ctk.CTkFrame(self.window, fg_color='white', width=self.width, height=self.height).place(x=0, y=0)
@@ -208,7 +200,7 @@ class App():
         self.apply_btn.place(x=16, y=580)
 
     def menu_frame(self):
-        frame = ctk.CTkFrame(self.window, height=self.height-50, width=200)
+        frame = ctk.CTkFrame(self.window, height=self.height-50, width=210)
 
         if not self.current_page == 'home-page':
             home_text = ctk.CTkLabel(frame, text='Back Home', font=(self.font, 25), text_color='#c7c7c7')
@@ -219,10 +211,34 @@ class App():
             searcb_text = ctk.CTkLabel(frame, text='Search Events', font=(self.font, 25), text_color='#c7c7c7')
             searcb_text.place(x=26, y=0)
 
-            search_box = ctk.CTkTextbox(frame, width=180, height=30, wrap='none', bg_color='white', fg_color='white', text_color='black')
-            search_box.place(x=10,y=40)
+            self.search_box = ctk.CTkTextbox(frame, width=140, height=30, wrap='none', bg_color='white', fg_color='white', text_color='black')
+            self.search_box.place(x=10,y=40)
+
+            submit_btn = ctk.CTkButton(frame, width=40, height=30, command=self.process_search, text='go', corner_radius=0)
+            submit_btn.place(x=155, y=40)
+
+            line = ctk.CTkFrame(frame, width=200, height=1, fg_color='grey')
+            line.place(x=5, y=85)
+
+            # button to add an event
+            add_event_btn = ctk.CTkButton(frame, width=185, height=40, corner_radius=0, text='Add Event', font=(self.font, 20), command=self.add_event_page)
+            add_event_btn.place(x=10, y=100)
+
+            tags_text = ctk.CTkLabel(frame, text='Filter by tag', font=(self.font, 18))
+            tags_text.place(x=10, y=180)
+
+            line = ctk.CTkFrame(frame, width=200, height=1, fg_color='grey')
+            line.place(x=5, y=212)
+
+            tag1 = ctk.CTkCheckBox(frame, text='Education', checkbox_width=20, checkbox_height=20, border_width=1, corner_radius=2)
+            tag1.place(x=10, y=220)
 
         return frame
+    
+    def process_search(self):
+        self.search = self.search_box.get("1.0", 'end-1c').strip()
+        if self.search:
+            print(self.search)
 
     def open_menu(self):
         # Define a function to animate the menu opening
@@ -236,11 +252,11 @@ class App():
 
         # Define a function to animate the menu closing
         def animate_close():
-            if self.my_x > -200:
+            if self.my_x > -210:
                 self.my_x -= 20
                 self.menu.place(x=self.my_x, y=50)
                 # Call animate_close again after a delay if menu is not fully closed
-                if self.my_x > -200:
+                if self.my_x > -210:
                     self.window.after(10, animate_close)
 
         # Define the close_menu function
@@ -259,8 +275,69 @@ class App():
             # If menu is open, start closing animation
             close_menu()
 
+    def add_event_page(self):
+        self.current_page = 'add-event-page'
+        self.add_event_stage_1()
+
+    def add_event_stage_1(self):
+        stage1_info = []
+
+        # if 
+
+        stage_f = ctk.CTkFrame(self.window, fg_color=self.white, bg_color=self.white, width=self.width, height=self.height)
+        stage_f.place(x=0,y=00)
+        self.header(stage_f)
+        stage_i = ctk.CTkLabel(stage_f, image=self.edit_icon, text='')
+        stage_i.place(x=20, y=95)
+        stage_t = ctk.CTkLabel(stage_f, text='What is your event about?', font=(self.font, 25), text_color='black')
+        stage_t.place(x=60, y=100)
+
+        line1 = ctk.CTkFrame(stage_f, width=self.width-20, height=2, fg_color=self.light_blue)
+        line1.place(x=10, y=165)
+
+        title = ctk.CTkLabel(stage_f, fg_color='white', text='Event Title', text_color='black', font=(self.font, 15))
+        title.place(x=20, y=190)
+        textbox1 = ctk.CTkTextbox(stage_f, width=self.width-15, height=50, fg_color='#f0f0f0', text_color='black', font=(self.font, 25), wrap='none', )
+        textbox1.place(x=7.5, y=220)
+        title_value = textbox1.get('0.0', 'end')
+        description = ctk.CTkLabel(stage_f, fg_color='white', text='Event Description', text_color='black', font=(self.font, 15))
+        description.place(x=20, y=280)
+        textbox2 = ctk.CTkTextbox(stage_f, width=self.width-15, height=150, fg_color='#f0f0f0', text_color='black', font=(self.font, 15), wrap='word')
+        textbox2.place(x=7.5, y=310)
+        description_value = textbox2.get('0.0', 'end')
+
+        line2 = ctk.CTkFrame(stage_f, width=self.width-20, height=2, fg_color=self.light_blue)
+        line2.place(x=10, y=490)
+
+        tags = ctk.CTkLabel(stage_f, fg_color='white', text='Event Tags', text_color='black', font=(self.font, 15))
+        tags.place(x=20, y=510)
+        checkbox = ctk.CTkOptionMenu(stage_f, values=['Community Service', 'Animals', 'Food', 'Education', 'Agriculture'], fg_color=self.light_blue, text_color='white')
+        checkbox.place(x=100, y=510.5)
+        tag_value = checkbox.get()
+
+        footer = ctk.CTkFrame(stage_f, height=47, width=self.width-20, fg_color='white')
+        footer.place(x=10, y=630) 
+        back_btn = ctk.CTkButton(footer, width=60, height=37, text='Back', fg_color='transparent', text_color='black', font=(self.font, 17), hover_color='white', command=lambda: print('clicked'))
+        back_btn.place(x=5, y=5)
+        cancel_btn = ctk.CTkButton(footer, width=65, height=37, text='Cancel', fg_color='transparent', text_color='black', font=(self.font, 17), border_color='lightgrey', border_width=1, hover_color='white', command=self.homepage)
+        cancel_btn.place(x=245, y=5)
+        next_stage_btn = ctk.CTkButton(footer, width=60, height=37, text='Next', fg_color=self.light_blue, text_color='white', font=(self.font, 17), hover_color=self.blue, command=self.add_event_stage_2)
+        next_stage_btn.place(x=315, y=5)
+
+
+        return stage1_info 
+
+    def add_event_stage_2(self):
+        pass
+
+    def add_event_stage_3(self):
+        pass
+
+    def process_stage(self, event):
+        pass
+
 
 if __name__ == "__main__":
     phone = [400, 700]
-    app = App(phone)
+    app = App(phone, 'admin001')
     app.boot()
