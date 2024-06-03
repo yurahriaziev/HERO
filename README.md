@@ -14,6 +14,8 @@
 - [Phone Icon](https://www.flaticon.com/authors/ilham-fitrotul-hayat)
 - [Left Arrow Icon](https://www.flaticon.com/authors/vectaicon)
 - [Edit Icon](https://www.flaticon.com/authors/freepik)
+- [Time Icon](https://www.flaticon.com/authors/dmitri13)
+- [Checkmark Icon](https://www.flaticon.com/authors/pixel-perfect)
 
 
 ---
