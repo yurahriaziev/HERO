@@ -23,7 +23,7 @@
 
 Lead - Alexi Gadish
 
-Backend - Yurii Hriaziev www.linkedin.com/in/yurii-hriaziev-7aa875240
+Backend - Alexi Gadish, Yurii Hriaziev www.linkedin.com/in/yurii-hriaziev-7aa875240
 
 Frontend - Andressa Cicotoste www.linkedin.com/in/andressa-cicotoste-195230282/
 
