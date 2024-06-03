@@ -31,11 +31,9 @@ class DB:
 
     def view_table(self, table):
         data = self.cur.execute(f'SELECT rowid, * FROM {table}').fetchall()
-        # for row in data:
-        #     print(row)
         return data
 
-
+# for  testing
 if __name__ == '__main__':
     db = DB()
     db.cur.execute('''INSERT INTO Users (first_n, last_n, username, birth_date_day, birth_date_month, birth_date_year, email, password) VALUES ('AdminName', 'AdminLast', 'admin001', 8, 'Feb', 2006, 'admin@gmail.com', 'myadminpass')''')
