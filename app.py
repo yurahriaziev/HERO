@@ -25,9 +25,9 @@ class App():
         self.database = DB()
         # create needed tables at boot up
         self.database.create_table('OpportunityEvents', 'title TEXT', 'description TEXT',
-                                   'location_country_city TEXT', 'date_start TEXT',
-                                   'organizer TEXT', 'contact_phone TEXT', 'contact_email TEXT',
-                                   'application_link TEXT')
+                                   'tag TEXT', 'date_start TEXT', 'date_end TEXT',
+                                   'location TEXT', 'organizer TEXT', 'organizer_phone TEXT',
+                                   'application_link TEXT', 'image TEXT')
         self.database.create_table('Users', 'first_n TEXT', 'last_n TEXT', 'username TEXT',
                                    'birth_date_day INTEGER', 'birth_date_month TEXT',
                                    'birth_date_year INTEGER', 'email TEXT', 'password TEXT')
@@ -36,10 +36,16 @@ class App():
         # self.database.cur.execute('''INSERT INTO Users (first_n, last_n, username, birth_date_day, birth_date_month, birth_date_year, email, password) VALUES ('AdminName', 'AdminLast', 'admin001', 8, 'Feb', 2006, 'admin@gmail.com', 'myadminpass')''')
         # self.database.conn.commit()
         # print('Current users')
+
+        # event1_desc = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ultricies, nisl id elementum porta, tortor urna placerat risus, non lobortis enim leo ac ex. Proin tempor lorem id lacus luctus laoreet. Praesent tempus lectus lectus. Aliquam cursus, felis sit amet aliquam elementum, dolor massa aliquam sem, quis aliquet lorem nunc.'
+        # self.database.cur.execute('''INSERT INTO OpportunityEvents (title, description, tag, date_start, date_end, location, organizer, organizer_phone, application_link, image) VALUES ('Opportunity Event 1', ?, 'Food', '15/8/2024', '17/8/2024', 'Israel/Tel Aviv', 'Organizer1', '300-434-0980', 'url2apply.com', 'image')''', (event1_desc,))
+        # self.database.cur.execute('''INSERT INTO OpportunityEvents (title, description, tag, date_start, date_end, location, organizer, organizer_phone, application_link, image) VALUES ('Opportunity Event 2', ?, 'Animals', '1/4/2024', '5/4/2024', 'Israel/Tel Aviv', 'Organizer2', '300-434-0980', 'url2apply.com', 'image')''', (event1_desc,))
+        # self.database.cur.execute('''INSERT INTO OpportunityEvents (title, description, tag, date_start, date_end, location, organizer, organizer_phone, application_link, image) VALUES ('Opportunity Event 3', ?, 'Education', '5/7/2024', '5/7/2024', 'Israel/Tel Aviv', 'Organizer3', '300-434-0980', 'url2apply.com', 'image')''', (event1_desc,))
+        # self.database.conn.commit()
+        
         users = self.database.view_table('Users')
         
 
-        self.events = self.database.view_table('OpportunityEvents')
         # for event in self.events:
         #     print(event)
 
@@ -54,6 +60,8 @@ class App():
         self.phone_icon = ctk.CTkImage(light_image=Image.open("icons/call.png").resize((20, 20)))
         self.left_arrow = ctk.CTkImage(light_image=Image.open("icons/left_arrow.png").resize((20, 20)))
         self.edit_icon = ctk.CTkImage(Image.open('icons/edit.png'), size=(35, 35))
+        self.time_icon = ctk.CTkImage(Image.open('icons/time.png'), size=(35, 35))
+        self.check_icon = ctk.CTkImage(Image.open('icons/check.png'), size=(35, 35))
 
     def boot(self):
         boot_frame = ctk.CTkFrame(self.window, fg_color='white', width=self.width, height=self.height).place(x=0, y=0)
@@ -79,6 +87,7 @@ class App():
 
     def homepage(self):
         self.current_page = 'home-page'
+        self.events = self.database.view_table('OpportunityEvents')
         self.home_frame = ctk.CTkFrame(self.window, fg_color='white', width=self.width, height=self.height)
         self.home_frame.place(x=0, y=0)
         self.header(self.home_frame)
@@ -103,7 +112,7 @@ class App():
                 event_title.place(x=5, y=0) 
                 event_desc = ctk.CTkLabel(self.card_desc, text=event[2], text_color='#8f8f8f', font=(self.font, 12))
                 event_desc.place(x=5, y=25) 
-                event_location = ctk.CTkLabel(self.card_desc, text=f'Where: {event[3]}', text_color='black', font=(self.font, 12))
+                event_location = ctk.CTkLabel(self.card_desc, text=f'Where: {event[6]}', text_color='black', font=(self.font, 12))
                 event_location.place(x=5, y=50) 
 
                 open_card_btn = ctk.CTkButton(self.card, image=self.open_card_icon, text="", width=40, height=80, fg_color=self.blue,
@@ -175,7 +184,7 @@ class App():
         self.location_frame.pack()
         self.location1 = ctk.CTkLabel(self.location_frame, image=self.location_icon, text="") #, width=self.width-40, height=30 , text=f'Where: {event[3]}', text_color='#5c5c5c'
         self.location1.place(x=0, y=0)
-        self.location2 = ctk.CTkLabel(self.location_frame, text=event[3], text_color='#5c5c5c')
+        self.location2 = ctk.CTkLabel(self.location_frame, text=event[6], text_color='#5c5c5c')
         self.location2.place(x=20, y=0)
 
         self.contact_frame = ctk.CTkFrame(self.event_frame, width=self.width-40, height=85, fg_color='white')
@@ -188,7 +197,7 @@ class App():
         email.place(x=25, y=22)
         phone_img = ctk.CTkLabel(self.contact_frame, image=self.phone_icon, text="", bg_color='white')
         phone_img.place(x=0, y=55)
-        phone = ctk.CTkLabel(self.contact_frame, text=event[6], text_color='black')
+        phone = ctk.CTkLabel(self.contact_frame, text=event[8], text_color='black')
         phone.place(x=25, y=52)
 
 
@@ -221,17 +230,17 @@ class App():
             line.place(x=5, y=85)
 
             # button to add an event
-            add_event_btn = ctk.CTkButton(frame, width=185, height=40, corner_radius=0, text='Add Event', font=(self.font, 20), command=self.add_event_page)
+            add_event_btn = ctk.CTkButton(frame, width=185, height=40, corner_radius=0, text='Add Event', font=(self.font, 20), command=lambda stage=1, event=False: self.process_stage(stage, event))
             add_event_btn.place(x=10, y=100)
 
-            tags_text = ctk.CTkLabel(frame, text='Filter by tag', font=(self.font, 18))
-            tags_text.place(x=10, y=180)
+            # tags_text = ctk.CTkLabel(frame, text='Filter by tag', font=(self.font, 18))
+            # tags_text.place(x=10, y=180)
 
-            line = ctk.CTkFrame(frame, width=200, height=1, fg_color='grey')
-            line.place(x=5, y=212)
+            # line = ctk.CTkFrame(frame, width=200, height=1, fg_color='grey')
+            # line.place(x=5, y=212)
 
-            tag1 = ctk.CTkCheckBox(frame, text='Education', checkbox_width=20, checkbox_height=20, border_width=1, corner_radius=2)
-            tag1.place(x=10, y=220)
+            # tag1 = ctk.CTkCheckBox(frame, text='Education', checkbox_width=20, checkbox_height=20, border_width=1, corner_radius=2)
+            # tag1.place(x=10, y=220)
 
         return frame
     
@@ -275,14 +284,20 @@ class App():
             # If menu is open, start closing animation
             close_menu()
 
-    def add_event_page(self):
-        self.current_page = 'add-event-page'
-        self.add_event_stage_1()
-
-    def add_event_stage_1(self):
-        stage1_info = []
-
-        # if 
+    def add_event_stage_1(self, event):
+        if not event:
+            event={
+                'title':'',
+                'description':'',
+                'tag':'',
+                'date_start':'',
+                'date_end':'',
+                'location':'',
+                'organizer':'',
+                'organizer_phone':'',
+                'application_link':'',
+                'image':''
+            }
 
         stage_f = ctk.CTkFrame(self.window, fg_color=self.white, bg_color=self.white, width=self.width, height=self.height)
         stage_f.place(x=0,y=00)
@@ -297,44 +312,187 @@ class App():
 
         title = ctk.CTkLabel(stage_f, fg_color='white', text='Event Title', text_color='black', font=(self.font, 15))
         title.place(x=20, y=190)
+        # title input field
         textbox1 = ctk.CTkTextbox(stage_f, width=self.width-15, height=50, fg_color='#f0f0f0', text_color='black', font=(self.font, 25), wrap='none', )
         textbox1.place(x=7.5, y=220)
-        title_value = textbox1.get('0.0', 'end')
+        textbox1.insert('1.0', event['title'])
+
         description = ctk.CTkLabel(stage_f, fg_color='white', text='Event Description', text_color='black', font=(self.font, 15))
         description.place(x=20, y=280)
+        # description input field
         textbox2 = ctk.CTkTextbox(stage_f, width=self.width-15, height=150, fg_color='#f0f0f0', text_color='black', font=(self.font, 15), wrap='word')
         textbox2.place(x=7.5, y=310)
-        description_value = textbox2.get('0.0', 'end')
+        textbox2.insert('1.0', event['description'])
 
         line2 = ctk.CTkFrame(stage_f, width=self.width-20, height=2, fg_color=self.light_blue)
         line2.place(x=10, y=490)
 
         tags = ctk.CTkLabel(stage_f, fg_color='white', text='Event Tags', text_color='black', font=(self.font, 15))
         tags.place(x=20, y=510)
-        checkbox = ctk.CTkOptionMenu(stage_f, values=['Community Service', 'Animals', 'Food', 'Education', 'Agriculture'], fg_color=self.light_blue, text_color='white')
+        # tag option field
+        current_option = ctk.StringVar(value=event['tag'])
+        checkbox = ctk.CTkOptionMenu(stage_f, values=['Community Service', 'Animals', 'Food', 'Education', 'Agriculture'], fg_color=self.light_blue, text_color='white', variable=current_option)
         checkbox.place(x=100, y=510.5)
-        tag_value = checkbox.get()
+
 
         footer = ctk.CTkFrame(stage_f, height=47, width=self.width-20, fg_color='white')
         footer.place(x=10, y=630) 
-        back_btn = ctk.CTkButton(footer, width=60, height=37, text='Back', fg_color='transparent', text_color='black', font=(self.font, 17), hover_color='white', command=lambda: print('clicked'))
-        back_btn.place(x=5, y=5)
         cancel_btn = ctk.CTkButton(footer, width=65, height=37, text='Cancel', fg_color='transparent', text_color='black', font=(self.font, 17), border_color='lightgrey', border_width=1, hover_color='white', command=self.homepage)
         cancel_btn.place(x=245, y=5)
-        next_stage_btn = ctk.CTkButton(footer, width=60, height=37, text='Next', fg_color=self.light_blue, text_color='white', font=(self.font, 17), hover_color=self.blue, command=self.add_event_stage_2)
+        next_stage_btn = ctk.CTkButton(footer, width=60, height=37, text='Next', fg_color=self.light_blue, text_color='white',
+                                       font=(self.font, 17), hover_color=self.blue,
+                                       command=lambda stage=2, event=event: self.process_stage(stage,
+                                                                                               event,
+                                                                                               title=textbox1.get("1.0", 'end-1c').strip(),
+                                                                                               description=textbox2.get("1.0", 'end-1c').strip(),
+                                                                                               tag=checkbox.get()))
         next_stage_btn.place(x=315, y=5)
 
+    def add_event_stage_2(self, event):
+        stage_f = ctk.CTkFrame(self.window, fg_color=self.white, bg_color=self.white, width=self.width, height=self.height)
+        stage_f.place(x=0,y=00)
+        self.header(stage_f)
 
-        return stage1_info 
+        stage_i = ctk.CTkLabel(stage_f, image=self.time_icon, text='')
+        stage_i.place(x=20, y=95)
+        stage_t = ctk.CTkLabel(stage_f, text='Time and Place?', font=(self.font, 25), text_color='black')
+        stage_t.place(x=80, y=100)
 
-    def add_event_stage_2(self):
-        pass
+        line1 = ctk.CTkFrame(stage_f, width=self.width-20, height=2, fg_color=self.light_blue)
+        line1.place(x=10, y=165)
 
-    def add_event_stage_3(self):
-        pass
+        start_d = ctk.CTkLabel(stage_f, fg_color='white', text='Start Date', text_color='black', font=(self.font, 15))
+        start_d.place(x=20, y=200)
+        start_d = ctk.CTkLabel(stage_f, fg_color='white', text='day/month/year', text_color='grey', font=(self.font, 15))
+        start_d.place(x=20, y=220)
+        # start date input field
+        date1_textbox = ctk.CTkTextbox(stage_f, width=100, height=25, fg_color='#f0f0f0', text_color='black', font=(self.font, 15), wrap='word')
+        date1_textbox.place(x=7.5, y=250)
+        date1_textbox.insert('1.0', event['date_start'])
 
-    def process_stage(self, event):
-        pass
+        end_d = ctk.CTkLabel(stage_f, fg_color='white', text='End Date', text_color='black', font=(self.font, 15))
+        end_d.place(x=150, y=200)
+        start_d = ctk.CTkLabel(stage_f, fg_color='white', text='day/month/year', text_color='grey', font=(self.font, 15))
+        start_d.place(x=150, y=220)
+        # end date input field
+        date2_textbox = ctk.CTkTextbox(stage_f, width=100, height=25, fg_color='#f0f0f0', text_color='black', font=(self.font, 15), wrap='word')
+        date2_textbox.place(x=152.5, y=250)
+        date2_textbox.insert('1.0', event['date_end'])
+
+        line2 = ctk.CTkFrame(stage_f, width=self.width-20, height=2, fg_color=self.light_blue)
+        line2.place(x=10, y=320)
+
+        location_text = ctk.CTkLabel(stage_f, fg_color='white', text='Location', text_color='black', font=(self.font, 15))
+        location_text.place(x=20, y=350)
+        # location input field
+        location_textbox = ctk.CTkTextbox(stage_f, width=self.width-15, height=25, fg_color='#f0f0f0', text_color='black', font=(self.font, 15), wrap='word')
+        location_textbox.place(x=7.5, y=380)
+        location_textbox.insert('1.0', event['location'])
+
+        footer = ctk.CTkFrame(stage_f, height=47, width=self.width-20, fg_color='white')
+        footer.place(x=10, y=630) 
+        back_btn = ctk.CTkButton(footer, width=60, height=37, text='Back', fg_color='transparent', text_color='black', font=(self.font, 17), hover_color='white', command=lambda stage=1, event=event: self.process_stage(stage, event))
+        back_btn.place(x=5, y=5)
+        next_stage_btn = ctk.CTkButton(footer, width=60, height=37, text='Next', fg_color=self.light_blue, text_color='white',
+                                       font=(self.font, 17), hover_color=self.blue,
+                                       command=lambda stage=3, event=event: self.process_stage(stage,
+                                                                                               event,
+                                                                                               date_start=date1_textbox.get("1.0", 'end-1c').strip(),
+                                                                                               date_end=date2_textbox.get("1.0", 'end-1c').strip(),
+                                                                                               location=location_textbox.get("1.0", 'end-1c').strip()))
+        next_stage_btn.place(x=315, y=5)
+
+    def add_event_stage_3(self, event):
+        stage_f = ctk.CTkFrame(self.window, fg_color=self.white, bg_color=self.white, width=self.width, height=self.height)
+        stage_f.place(x=0,y=00)
+        self.header(stage_f)
+
+        stage_i = ctk.CTkLabel(stage_f, image=self.check_icon, text='')
+        stage_i.place(x=20, y=95)
+        stage_t = ctk.CTkLabel(stage_f, text='Looks good?', font=(self.font, 25), text_color='black')
+        stage_t.place(x=80, y=100) 
+
+        # content
+        title = ctk.CTkLabel(stage_f, fg_color='white', text='Event Title', text_color='black', font=(self.font, 15))
+        title.place(x=20, y=140)
+        # title input field
+        textbox1 = ctk.CTkTextbox(stage_f, width=245, height=50, fg_color='#f0f0f0', text_color='black', font=(self.font, 25), wrap='none', )
+        textbox1.place(x=7.5, y=170)
+        textbox1.insert('1.0', event['title'])
+
+        start_d = ctk.CTkLabel(stage_f, fg_color='white', text='Start Date', text_color='black', font=(self.font, 15))
+        start_d.place(x=20, y=230)
+        date1_textbox = ctk.CTkTextbox(stage_f, width=100, height=25, fg_color='#f0f0f0', text_color='black', font=(self.font, 15), wrap='word')
+        date1_textbox.place(x=7.5, y=260)
+        date1_textbox.insert('1.0', event['date_start'])
+
+        end_d = ctk.CTkLabel(stage_f, fg_color='white', text='End Date', text_color='black', font=(self.font, 15))
+        end_d.place(x=150, y=230)
+        date2_textbox = ctk.CTkTextbox(stage_f, width=100, height=25, fg_color='#f0f0f0', text_color='black', font=(self.font, 15), wrap='word')
+        date2_textbox.place(x=137.5, y=260)
+        date2_textbox.insert('1.0', event['date_end'])
+
+        description = ctk.CTkLabel(stage_f, fg_color='white', text='Event Description', text_color='black', font=(self.font, 15))
+        description.place(x=20, y=300)
+        # description input field
+        textbox2 = ctk.CTkTextbox(stage_f, width=245, height=150, fg_color='#f0f0f0', text_color='black', font=(self.font, 15), wrap='word')
+        textbox2.place(x=7.5, y=330)
+        textbox2.insert('1.0', event['description'])
+
+        tags = ctk.CTkLabel(stage_f, fg_color='white', text='Event Tags', text_color='black', font=(self.font, 15))
+        tags.place(x=20, y=485)
+        # tag option field
+        current_option = ctk.StringVar(value=event['tag'])
+        checkbox = ctk.CTkOptionMenu(stage_f, values=['Community Service', 'Animals', 'Food', 'Education', 'Agriculture'], fg_color=self.light_blue, text_color='white', variable=current_option)
+        checkbox.place(x=7.5, y=510)
+
+        footer = ctk.CTkFrame(stage_f, height=47, width=self.width-20, fg_color='white')
+        footer.place(x=10, y=630) 
+        back_btn = ctk.CTkButton(footer, width=60, height=37, text='Back', fg_color='transparent', text_color='black', font=(self.font, 17), hover_color='white', command=lambda stage=2, event=event: self.process_stage(stage, event))
+        back_btn.place(x=5, y=5) 
+        next_stage_btn = ctk.CTkButton(footer, width=60, height=37, text='Next', fg_color=self.light_blue, text_color='white',
+                                       font=(self.font, 17), hover_color=self.blue,
+                                       command=lambda stage=4, event=event: self.process_stage(stage,
+                                                                                               event,
+                                                                                               organizer='Organizer 1',
+                                                                                               organizer_phone='400-8989-1234',
+                                                                                               application_link='url2apply.com',
+                                                                                               image='path/to/image'))
+        next_stage_btn.place(x=315, y=5)   
+
+    def process_stage(self, stage, event, **current_data):
+        self.current_page = 'add-event-page'
+        print(event)
+        keys = list(current_data.keys())
+        print(keys)
+        values = list(current_data.values())
+        print(values)
+
+        # populating 'event' with the received data from current_data
+        for i in range(len(keys)):
+            event[keys[i]] = values[i]
+
+        print(event)
+        
+        if stage == 1:
+            self.add_event_stage_1(event)
+        elif stage == 2:
+            self.add_event_stage_2(event)
+        elif stage == 3:
+            self.add_event_stage_3(event)
+        elif stage == 4:
+            self.database.add_item('OpportunityEvents',
+                                   title=event['title'],
+                                   description=event['description'],
+                                   tag=event['tag'],
+                                   date_start=event['date_start'],
+                                   date_end=event['date_end'],
+                                   location=event['location'],
+                                   organizer=event['organizer'],
+                                   organizer_phone=event['organizer_phone'],
+                                   application_link=event['application_link'],
+                                   image=event['image'])
+            self.homepage()
 
 
 if __name__ == "__main__":
