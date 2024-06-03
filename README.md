@@ -12,7 +12,8 @@
 - [Location Pin Icon](https://www.flaticon.com/authors/freepik)
 - [Email Icon](https://www.flaticon.com/authors/ilham-fitrotul-hayat)
 - [Phone Icon](https://www.flaticon.com/authors/ilham-fitrotul-hayat)
-- [Left Arrow Icon] (https://www.flaticon.com/authors/vectaicon)
+- [Left Arrow Icon](https://www.flaticon.com/authors/vectaicon)
+- [Edit Icon](https://www.flaticon.com/authors/freepik)
 
 
 ---
